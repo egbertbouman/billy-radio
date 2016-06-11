@@ -407,6 +407,7 @@ app.service('ApiService', function($http, $websocket, HelperService) {
 
     socket.onMessage(function(message) {
         var data = JSON.parse(message.data);
+        //console.log('Got message: ' + data.type);
         if (data.type == 'status') {
             self.last_status_update = new Date().getTime();
             angular.copy(data.position, self.position)
@@ -435,7 +436,6 @@ app.service('ApiService', function($http, $websocket, HelperService) {
                                    user_name: data.user_name,
                                    content: data.content})
         }
-        console.log(data.type);
     });
 
     this.register = function(name, activity) {

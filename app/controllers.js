@@ -27,40 +27,55 @@ app.controller('MainCtrl', function ($rootScope, $scope, $interval, $uibModal, H
     }, 1000);
 
 
-    /* Server communication */
+    /* Server communication and synchronization */
     $scope.tracks = ApiService.tracks;
     $scope.position = ApiService.position;
     $scope.registrations = ApiService.registrations;
     $scope.suggestions = ApiService.suggestions;
 
-    var reposition = function(index, position) {
-        // Keep the play position in sync with that of the server
-
-        if (MusicService.index !== index) {
-            MusicService.load_and_play({name: 'default_name', index: index});
+    var playlist_position = function(index, position) {
+        var pl_pos = 0;
+        for (var i = 0; i < index; i++) {
+            pl_pos += $scope.tracks[i].duration;
         }
+        pl_pos += position;
+        return pl_pos;
+    }
 
-        var timediff = Math.abs(MusicService.get_current_time() - position);
-        console.log('timediff = ' + timediff);
-            
+    var reposition = function(index, position) {
+        // Calculate position within the playlist for both the client and the server
+        var pl_pos_srv = playlist_position(index, position);
+        var pl_pos_clt = playlist_position(MusicService.index, MusicService.get_current_time());
+        var timediff = Math.abs(pl_pos_clt - pl_pos_srv);
+        //console.log('Time difference: ' + timediff);
+
         if (isNaN(timediff)) {
-            // In case the player has not started yet, retry in 1s
-            console.log('retry');
-            setTimeout(function() {
+            // In case the player has not started yet, retry when the player is ready
+            console.log('Can\'t calculate time difference right now, rescheduling')
+            var unsubscribe = $rootScope.$on('playing', function(event) {
                 var time_correction = (new Date().getTime() - ApiService.last_status_update) / 1000;
-                console.log('correction = ' + time_correction);
                 reposition(index, position + time_correction);
-            }, 1000);
+                unsubscribe();
+            });
         }
         else if (timediff >= 5) {
+            console.log('Time difference is ' + timediff + 's, correcting play position')
+            if (MusicService.index !== index) {
+                MusicService.load_and_play({name: 'default_name', index: index});
+            }
             MusicService.seek(position);
         }
     };
+
     var reload = function(tracks) {
         MusicService.set_playlists({default_name: {tracks: tracks}});
         MusicService.load_and_play({name: 'default_name', index: 0});
     };
-    
+
+    $rootScope.$on('playing', function(event) {
+        // Soundcloud seems to reset the volume after changing tracks, so we need to set the volume again.
+        MusicService.set_volume($scope.current_volume);
+    });
     $rootScope.$on('ready', function(event) {
         var modalInstance = $uibModal.open({
             animation: false,
@@ -72,7 +87,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $interval, $uibModal, H
         modalInstance.result.then(function success(result) {
             ApiService.register(result.name, result.activity);
 
-            // Starting playing
+            // Start playing
             $scope.$watch('tracks', function (new_value, old_val) {
                 reload(new_value);
             }, true);
