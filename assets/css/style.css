@@ -22,10 +22,8 @@ body {
     height: 100%;
 }
 
-.hide-text-overflow {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.full-width {
+    width: 100%;
 }
 
 .list-group-item:first-child {
@@ -69,9 +67,22 @@ body {
     margin: 10px 0 10px 0;
 }
 
+.title-col {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+}
+
 .cover-art {
     border: 1px solid #fff;
     margin-right: 10px;
+}
+
+.cover-art-col {
+    width: 100px;
+    height: 100px;
+    padding: 5px;
 }
 
 .stats {
@@ -149,4 +160,13 @@ body {
     width: 100px;
     height: 100px;
     left: -100px;
+}
+.widget {
+     webkit-box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);
+     -moz-box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);
+     box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);
+     white-space: nowrap;
+     padding: 0px;
+     border: 1px solid #ddd;
+     border-radius: 4px;
 }

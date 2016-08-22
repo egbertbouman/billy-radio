@@ -23,6 +23,9 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         $scope.duration = time || 1;
         $scope.duration_str = HelperService.formatTime(time);
 
+        $scope.remaining = Math.abs($scope.current_time - $scope.duration);
+        $scope.remaining_str = HelperService.formatTime($scope.remaining);
+
         $scope.playing = MusicService.playing;
     }, 1000);
 

@@ -8,25 +8,33 @@
     </head>
     <body>
         <div ng-controller="MainCtrl" force-registration="false">
-            <div ng-repeat="track in tracks | range:musicservice.index | limitTo:1" style="-webkit-box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);-moz-box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);white-space: nowrap; padding: 0px; border: 1px solid #ddd; border-radius: 4px;" ng-cloak>
-                <table style="width:100%;">
+            <div ng-repeat="track in tracks | range:musicservice.index | limitTo:1" class="widget" ng-cloak>
+                <table class="full-width">
                     <tr>
-                        <td style="padding: 5px;min-width: 100px;min-height:100px;"><img class="img-thumbnail full-size" ng-src="{{track.image}}" src="assets/img/blank.png"></div>
+                        <td class="cover-art-col"><img class="img-thumbnail full-size" ng-src="{{track.image}}" src="assets/img/blank.png"></div>
                         <td class="content">
-                            <table style="width:100%;">
+                            <table class="full-width">
                                 <tr>
-                                    <td class="hide-text-overflow" style="padding: 5px; max-width:100px">{{track.title}}</td>
-                                    <td style="padding: 5px;">
+                                    <td class="col-padding title-col">{{track.title}}</td>
+                                    <td class="col-padding">
                                         <big>
-                                            <span class="glyphicon glyphicon-play" style="top: 0px" ng-show="!playing" class="play" ng-click="play()"></span>
-                                            <span class="glyphicon glyphicon-stop" style="top: 0px" ng-show="playing" class="stop" ng-click="stop()"></span>
-                                            <span class="glyphicon glyphicon-volume-up" popover-append-to-body="true" popover-trigger="outsideClick" popover-placement="left" uib-popover-template="'app/views/volume.html'"></span>
+                                            <span class="glyphicon glyphicon-play" ng-show="!playing" class="play" ng-click="play()"></span>
+                                            <span class="glyphicon glyphicon-stop" ng-show="playing" class="stop" ng-click="stop()"></span>
                                         </big>
                                     </div>
                                 </tr>
                                 <tr>
-                                    <td style="width: 100%; padding: 5px;"><uib-progressbar max="duration" value="current_time" ng-click="timeline_click($event)"></uib-progressbar></td>
-                                    <td style="text-align: center; padding: 5px;">{{ current_time_str }}</td>
+                                    <td colspan="2" class="col-padding full-width">next track starts in {{ remaining_str }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="col-padding full-width">
+                                        <table class="full-width">
+                                            <tr>
+                                                <td><span class="glyphicon glyphicon glyphicon-volume-off"></span><td>
+                                                <td class="col-padding full-width"><uib-progressbar max="100" value="current_volume" ng-click="volume_click($event)"></uib-progressbar></span><td>
+                                                <td><span class="glyphicon glyphicon glyphicon-volume-up"></span><td>
+                                            </tr>
+                                        </table>
                                 </tr>
                             </table>
                         </td>
