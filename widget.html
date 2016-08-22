@@ -16,25 +16,20 @@
                             <table class="full-width">
                                 <tr>
                                     <td class="col-padding title-col">{{track.title}}</td>
-                                    <td class="col-padding">
-                                        <big>
-                                            <span class="glyphicon glyphicon-play" ng-show="!playing" class="play" ng-click="play()"></span>
-                                            <span class="glyphicon glyphicon-stop" ng-show="playing" class="stop" ng-click="stop()"></span>
-                                        </big>
-                                    </div>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="col-padding full-width">next track starts in {{ remaining_str }}</td>
+                                    <td class="col-padding full-width">next track starts in {{ remaining_str }}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="col-padding full-width">
+                                    <td class="col-padding full-width">
                                         <table class="full-width">
                                             <tr>
-                                                <td><span class="glyphicon glyphicon glyphicon-volume-off"></span><td>
+                                                <td><a ng-click="set_volume(0)"><span class="glyphicon glyphicon glyphicon-volume-off"></span></a><td>
                                                 <td class="col-padding full-width"><uib-progressbar max="100" value="current_volume" ng-click="volume_click($event)"></uib-progressbar></span><td>
-                                                <td><span class="glyphicon glyphicon glyphicon-volume-up"></span><td>
+                                                <td><a ng-click="set_volume(100)"><span class="glyphicon glyphicon glyphicon-volume-up"></span></a><td>
                                             </tr>
                                         </table>
+                                    </td>
                                 </tr>
                             </table>
                         </td>

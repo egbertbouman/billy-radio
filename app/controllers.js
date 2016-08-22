@@ -6,11 +6,14 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
     $scope.$on('ended', function(event) {
         MusicService.next(true);
     });
+    $scope.set_volume = function(volume) {
+        MusicService.set_volume(volume);
+        $scope.current_volume = volume;
+    };
     $scope.volume_click = function(e) {
         var width = $(e.currentTarget).width();
         var volume = (e.offsetX / width) * 100;
-        MusicService.set_volume(volume);
-        $scope.current_volume = volume;
+        $scope.set_volume(volume);
     };
     $scope.current_time = 0;
     $scope.current_volume = 80;
