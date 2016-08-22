@@ -165,8 +165,11 @@ body {
      webkit-box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);
      -moz-box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);
      box-shadow: inset 10px 10px 250px -120px rgba(0,0,0,0.5);
-     white-space: nowrap;
      padding: 0px;
      border: 1px solid #ddd;
      border-radius: 4px;
+     height: 100px;
+}
+.padding {
+    padding: 5px;
 }

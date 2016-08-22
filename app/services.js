@@ -247,10 +247,12 @@ app.factory('SoundCloudPlayerFactory', function($rootScope) {
 
 app.service('MusicService', function($rootScope, jPlayerFactory, YoutubePlayerFactory, SoundCloudPlayerFactory) {
 
-    // Initialize players
-    jPlayerFactory.create('#player-core', '#player-ui');
-    YoutubePlayerFactory.create('yt_player');
-    SoundCloudPlayerFactory.create('sc_player');
+    this.init = function() {
+        // Initialize players
+        jPlayerFactory.create('#player-core', '#player-ui');
+        YoutubePlayerFactory.create('yt_player');
+        SoundCloudPlayerFactory.create('sc_player');
+    }
 
     this.players_ready = 0;
     this.players_total = 3;

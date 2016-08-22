@@ -1,8 +1,44 @@
 app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uibModal, HelperService, MusicService, ApiService) {
+
     /* Music player */
     $scope.musicservice = MusicService;
-    $scope.play = function() { MusicService.play(); };
-    $scope.stop = function() { MusicService.stop(); };
+    $scope.current_time = 0;
+    $scope.current_volume = 80;
+
+    $scope.start = function() {
+        // Start music service
+        MusicService.init();
+
+        // Wait for it to load...
+        $rootScope.$on('ready', function(event) {
+
+            // Start playing
+            $scope.$watch('tracks', function (new_value, old_val) {
+                reload(new_value);
+            }, true);
+            $scope.$watch('position', function (new_value, old_val) {
+                reposition(new_value[0], new_value[1]);
+            }, true);
+
+            // Periodically update status
+            $interval(function() {
+                var time = MusicService.get_current_time();
+                $scope.current_time = time;
+                $scope.current_time_str = HelperService.formatTime(time);
+
+                time = MusicService.get_duration();
+                $scope.duration = time || 1;
+                $scope.duration_str = HelperService.formatTime(time);
+
+                $scope.remaining = Math.abs($scope.current_time - $scope.duration);
+                $scope.remaining_str = HelperService.formatTime($scope.remaining);
+            }, 1000);
+        });
+    }
+    $scope.$on('playing', function(event) {
+        // Soundcloud seems to reset the volume after changing tracks, so we need to set the volume again.
+        MusicService.set_volume($scope.current_volume);
+    });
     $scope.$on('ended', function(event) {
         MusicService.next(true);
     });
@@ -15,30 +51,18 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         var volume = (e.offsetX / width) * 100;
         $scope.set_volume(volume);
     };
-    $scope.current_time = 0;
-    $scope.current_volume = 80;
-    $interval(function() {
-        var time = MusicService.get_current_time();
-        $scope.current_time = time;
-        $scope.current_time_str = HelperService.formatTime(time);
+    var reload = function(tracks) {
+        MusicService.set_playlists({default_name: {tracks: tracks}});
+        MusicService.load_and_play({name: 'default_name', index: 0});
+    };
 
-        time = MusicService.get_duration();
-        $scope.duration = time || 1;
-        $scope.duration_str = HelperService.formatTime(time);
-
-        $scope.remaining = Math.abs($scope.current_time - $scope.duration);
-        $scope.remaining_str = HelperService.formatTime($scope.remaining);
-
-        $scope.playing = MusicService.playing;
-    }, 1000);
-
-
-    /* Server communication and synchronization */
+    /* Server variables */
     $scope.tracks = ApiService.tracks;
     $scope.position = ApiService.position;
     $scope.registrations = ApiService.registrations;
     $scope.suggestions = ApiService.suggestions;
 
+    /* Play position synchronization */
     var playlist_position = function(index, position) {
         var pl_pos = 0;
         for (var i = 0; i < index; i++) {
@@ -73,48 +97,22 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         }
     };
 
-    var reload = function(tracks) {
-        MusicService.set_playlists({default_name: {tracks: tracks}});
-        MusicService.load_and_play({name: 'default_name', index: 0});
-    };
-
-    var start = function() {
-        // Start playing
-        $scope.$watch('tracks', function (new_value, old_val) {
-            reload(new_value);
-        }, true);
-        $scope.$watch('position', function (new_value, old_val) {
-            reposition(new_value[0], new_value[1]);
-        }, true);
-    }
-
-    // If forceRegistration is anything other then "false", force the user to register before starting the radio
+    /* Dialogs */
     if ($attrs.forceRegistration !== "false") {
-        $rootScope.$on('ready', function(event) {
-            var modalInstance = $uibModal.open({
-                animation: false,
-                templateUrl: 'app/views/registration_modal.html',
-                controller: 'RegistrationModalCtrl',
-                backdrop  : 'static',
-                keyboard  : false
-            });
-            modalInstance.result.then(function success(result) {
-                ApiService.register(result.name, result.activity);
-                start();
-            }, function error() {
-            });
+        // If forceRegistration is anything other then "false", force the user to register before starting the radio
+        var modalInstance = $uibModal.open({
+            animation: false,
+            templateUrl: 'app/views/registration_modal.html',
+            controller: 'RegistrationModalCtrl',
+            backdrop  : 'static',
+            keyboard  : false
+        });
+        modalInstance.result.then(function success(result) {
+            ApiService.register(result.name, result.activity);
+            $scope.start();
+        }, function error() {
         });
     }
-    else {
-        $rootScope.$on('ready', function(event) {
-            start();
-        });
-    }
-
-    $rootScope.$on('playing', function(event) {
-        // Soundcloud seems to reset the volume after changing tracks, so we need to set the volume again.
-        MusicService.set_volume($scope.current_volume);
-    });
 
     $scope.create_suggestion = function() {
         var modalInstance = $uibModal.open({
@@ -127,6 +125,13 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         }, function error() {
         });
     };
+
+    $scope.close_widget = function () {
+        var parent = window.parent;
+        if (parent && parent.postMessage) {
+            parent.postMessage('close', '*');
+        }
+    }
 });
 
 app.controller('RegistrationModalCtrl',  function ($scope, $uibModalInstance) {

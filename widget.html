@@ -6,9 +6,19 @@
         <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="assets/css/style.css" type="text/css">
     </head>
-    <body>
-        <div ng-controller="MainCtrl" force-registration="false">
-            <div ng-repeat="track in tracks | range:musicservice.index | limitTo:1" class="widget" ng-cloak>
+    <body ng-controller="MainCtrl" force-registration="false">
+        <div class="padding widget" ng-show="user_ok === undefined">
+            <p>This part of the course we have music to help you focus, do you wish to play it?</p>
+            <p>
+                <button type="button" class="btn btn-default" ng-click="user_ok = true; start()">Yes</button>
+                <button type="button" class="btn btn-default" ng-click="user_ok = false; close_widget()">No</button>
+            </p>
+        </div>
+        <div ng-show="user_ok">
+            <div class="padding widget" ng-show="!musicservice.playing">
+                <p>Loading <img src="assets/img/loading.gif"></p>
+            </div>
+            <div ng-repeat="track in tracks | range:musicservice.index | limitTo:1" class="widget" ng-show="musicservice.playing" ng-cloak>
                 <table class="full-width">
                     <tr>
                         <td class="cover-art-col"><img class="img-thumbnail full-size" ng-src="{{track.image}}" src="assets/img/blank.png"></div>
@@ -45,7 +55,6 @@
     <script src="//cdn.rawgit.com/gdi2290/angular-websocket/v1.0.9/angular-websocket.min.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.2/jquery.timeago.min.js" type="text/javascript"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/jplayer/jquery.jplayer.min.js"></script>
 
     <!-- UI Libs -->
