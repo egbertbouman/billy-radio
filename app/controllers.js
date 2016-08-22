@@ -1,4 +1,4 @@
-app.controller('MainCtrl', function ($rootScope, $scope, $interval, $uibModal, HelperService, MusicService, ApiService) {
+app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uibModal, HelperService, MusicService, ApiService) {
     /* Music player */
     $scope.musicservice = MusicService;
     $scope.play = function() { MusicService.play(); };
@@ -72,30 +72,42 @@ app.controller('MainCtrl', function ($rootScope, $scope, $interval, $uibModal, H
         MusicService.load_and_play({name: 'default_name', index: 0});
     };
 
+    var start = function() {
+        // Start playing
+        $scope.$watch('tracks', function (new_value, old_val) {
+            reload(new_value);
+        }, true);
+        $scope.$watch('position', function (new_value, old_val) {
+            reposition(new_value[0], new_value[1]);
+        }, true);
+    }
+
+    // If forceRegistration is anything other then "false", force the user to register before starting the radio
+    if ($attrs.forceRegistration !== "false") {
+        $rootScope.$on('ready', function(event) {
+            var modalInstance = $uibModal.open({
+                animation: false,
+                templateUrl: 'app/views/registration_modal.html',
+                controller: 'RegistrationModalCtrl',
+                backdrop  : 'static',
+                keyboard  : false
+            });
+            modalInstance.result.then(function success(result) {
+                ApiService.register(result.name, result.activity);
+                start();
+            }, function error() {
+            });
+        });
+    }
+    else {
+        $rootScope.$on('ready', function(event) {
+            start();
+        });
+    }
+
     $rootScope.$on('playing', function(event) {
         // Soundcloud seems to reset the volume after changing tracks, so we need to set the volume again.
         MusicService.set_volume($scope.current_volume);
-    });
-    $rootScope.$on('ready', function(event) {
-        var modalInstance = $uibModal.open({
-            animation: false,
-            templateUrl: 'app/views/registration_modal.html',
-            controller: 'RegistrationModalCtrl',
-            backdrop  : 'static',
-            keyboard  : false
-        });
-        modalInstance.result.then(function success(result) {
-            ApiService.register(result.name, result.activity);
-
-            // Start playing
-            $scope.$watch('tracks', function (new_value, old_val) {
-                reload(new_value);
-            }, true);
-            $scope.$watch('position', function (new_value, old_val) {
-                reposition(new_value[0], new_value[1]);
-            }, true);
-        }, function error() {
-        });
     });
 
     $scope.create_suggestion = function() {
