@@ -4,9 +4,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	    <title>Billy Radio</title>
         <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+        <link rel="stylesheet" href="assets/css/style-abcb9650ed.css">
     </head>
-    <body>
+    <body class="background">
         <div class="container-fluid" ng-controller="MainCtrl">
             <div class="list-group col-sm-7 col-sm-offset-1">
                 <div class="col-sm-12 col-padding">
@@ -36,8 +36,6 @@
                         <div id="player-ui" class="audio">
                             <div class="type-playlist">
                                 <div class="gui interface">
-                                    <span class="glyphicon glyphicon-play" ng-show="!playing" class="play" ng-click="play()"></span>
-                                    <span class="glyphicon glyphicon-stop" ng-show="playing" class="stop" ng-click="stop()"></span>
                                     <span class="glyphicon glyphicon-volume-down"></span>
                                     <uib-progressbar class="volume-bar" max="100" value="current_volume" ng-click="volume_click($event)"></uib-progressbar>
                                     <span class="glyphicon glyphicon-volume-up"></span>
@@ -109,10 +107,5 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
 
     <!-- App libs -->
-    <!-- build:js assets/js/app.js -->
-    <script src="app/app.js"></script>
-    <script src="app/services.js"></script>
-    <script src="app/controllers.js"></script>
-    <script src="app/filters.js"></script>
-    <!-- endbuild -->
+    <script src="assets/js/app-eb04a8b188.js"></script>
 </html>

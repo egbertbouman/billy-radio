@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html data-ng-app="billy-radio">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <title>Billy Radio</title>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="assets/css/style-abcb9650ed.css">
+    </head>
+    <body ng-controller="MainCtrl" force-registration="false">
+        <div class="padding widget" ng-show="user_ok === undefined">
+            <p>This part of the course we have music to help you focus. Do you wish to play it?</p>
+            <p>
+                <button type="button" class="btn btn-default" ng-click="user_ok = true; start()">Yes</button>
+                <button type="button" class="btn btn-default" ng-click="user_ok = false; close_widget()">No</button>
+            </p>
+        </div>
+        <div ng-show="user_ok">
+            <div class="padding widget" ng-show="!musicservice.playing">
+                <p>Loading <img src="assets/img/loading.gif"></p>
+            </div>
+            <div ng-repeat="track in tracks | range:musicservice.index | limitTo:1" class="widget" ng-show="musicservice.playing" ng-cloak>
+                <table class="full-width">
+                    <tr>
+                        <td class="cover-art-col"><img class="img-thumbnail full-size" ng-src="{{track.image}}" src="assets/img/blank.png"></div>
+                        <td class="content">
+                            <table class="full-width">
+                                <tr>
+                                    <td class="col-padding title-col">{{track.title}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-padding full-width"><small>next track starts in {{ remaining_str }}</small></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-padding full-width">
+                                        <table class="full-width">
+                                            <tr>
+                                                <td><a href="" ng-click="set_volume(0)"><span class="glyphicon glyphicon glyphicon-volume-off"></span></a><td>
+                                                <td class="col-padding full-width"><uib-progressbar max="100" value="current_volume" ng-click="volume_click($event)"></uib-progressbar></span><td>
+                                                <td><a href="" ng-click="set_volume(100)"><span class="glyphicon glyphicon glyphicon-volume-up"></span></a><td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="player-core" class="player"></div>
+        </div>
+    </body>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="//cdn.rawgit.com/gdi2290/angular-websocket/v1.0.9/angular-websocket.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jplayer/2.9.2/jplayer/jquery.jplayer.min.js"></script>
+
+    <!-- UI Libs -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- App libs -->
+    <script src="assets/js/app-eb04a8b188.js"></script>
+</html>
