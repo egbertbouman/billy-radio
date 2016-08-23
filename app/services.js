@@ -252,7 +252,7 @@ app.service('MusicService', function($rootScope, jPlayerFactory, YoutubePlayerFa
         jPlayerFactory.create('#player-core', '#player-ui');
         YoutubePlayerFactory.create('yt_player');
         SoundCloudPlayerFactory.create('sc_player');
-    }
+    };
 
     this.players_ready = 0;
     this.players_total = 3;
@@ -351,11 +351,12 @@ app.service('MusicService', function($rootScope, jPlayerFactory, YoutubePlayerFa
         }
     };
     this.next = function(wrap) {
+        var next_index;
         if (wrap === true) {
-            var next_index = (this.index + 1) % this.playlists[this.name].tracks.length;
+            next_index = (this.index + 1) % this.playlists[this.name].tracks.length;
         }
         else {
-            var next_index = (this.index + 1 < this.playlists[this.name].tracks.length) ? this.index + 1 : undefined;
+            next_index = (this.index + 1 < this.playlists[this.name].tracks.length) ? this.index + 1 : undefined;
         }
 
         if (next_index !== undefined) {
@@ -398,7 +399,7 @@ app.service('MusicService', function($rootScope, jPlayerFactory, YoutubePlayerFa
 
 
 app.service('ApiService', function($http, $websocket, HelperService) {
-    this.last_status_update;
+    this.last_status_update = undefined;
     this.tracks = [];
     this.position = [0, 0];
     this.registrations = [];
@@ -412,7 +413,7 @@ app.service('ApiService', function($http, $websocket, HelperService) {
         //console.log('Got message: ' + data.type);
         if (data.type == 'status') {
             self.last_status_update = new Date().getTime();
-            angular.copy(data.position, self.position)
+            angular.copy(data.position, self.position);
         }
         else if (data.type == 'data') {
             angular.copy(data.tracks, self.tracks);
@@ -423,7 +424,7 @@ app.service('ApiService', function($http, $websocket, HelperService) {
         else if (data.type == 'registered') {
             self.registrations.push({user_id: data.user_id,
                                      user_name: data.user_name,
-                                     time: data.time})
+                                     time: data.time});
         }
         else if (data.type == 'unregistered') {
             for (var i = 0; i < self.registrations.length; i++) {
@@ -436,7 +437,7 @@ app.service('ApiService', function($http, $websocket, HelperService) {
         else if (data.type == 'suggested') {
             self.suggestions.push({user_id: data.user_id,
                                    user_name: data.user_name,
-                                   content: data.content})
+                                   content: data.content});
         }
     });
 

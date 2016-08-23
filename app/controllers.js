@@ -34,7 +34,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
                 $scope.remaining_str = HelperService.formatTime($scope.remaining);
             }, 1000);
         });
-    }
+    };
     $scope.$on('playing', function(event) {
         // Soundcloud seems to reset the volume after changing tracks, so we need to set the volume again.
         MusicService.set_volume($scope.current_volume);
@@ -70,7 +70,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         }
         pl_pos += position;
         return pl_pos;
-    }
+    };
 
     var reposition = function(index, position) {
         // Calculate position within the playlist for both the client and the server
@@ -81,7 +81,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
 
         if (isNaN(timediff)) {
             // In case the player has not started yet, retry when the player is ready
-            console.log('Can\'t calculate time difference right now, rescheduling')
+            console.log('Can\'t calculate time difference right now, rescheduling');
             var unsubscribe = $rootScope.$on('playing', function(event) {
                 var time_correction = (new Date().getTime() - ApiService.last_status_update) / 1000;
                 reposition(index, position + time_correction);
@@ -89,7 +89,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
             });
         }
         else if (timediff >= 5) {
-            console.log('Time difference is ' + timediff + 's, correcting play position')
+            console.log('Time difference is ' + timediff + 's, correcting play position');
             if (MusicService.index !== index) {
                 MusicService.load_and_play({name: 'default_name', index: index});
             }
@@ -131,7 +131,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         if (parent && parent.postMessage) {
             parent.postMessage('close', '*');
         }
-    }
+    };
 });
 
 app.controller('RegistrationModalCtrl',  function ($scope, $uibModalInstance) {
