@@ -6,15 +6,8 @@
         <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="assets/css/style-abcb9650ed.css">
     </head>
-    <body ng-controller="MainCtrl" force-registration="false" ng-init="user_ok = true">
-        <div class="padding widget" ng-show="user_ok === undefined">
-            <p>This part of the course we have music to help you focus. Do you wish to play it?</p>
-            <p>
-                <button type="button" class="btn btn-default" ng-click="user_ok = true; start()">Yes</button>
-                <button type="button" class="btn btn-default" ng-click="user_ok = false; close_widget()">No</button>
-            </p>
-        </div>
-        <div ng-show="user_ok">
+    <body ng-controller="MainCtrl" force-registration="false">
+        <div>
             <div class="padding widget" ng-show="!musicservice.playing">
                 <p>Loading <img src="assets/img/loading.gif"></p>
             </div>
