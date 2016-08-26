@@ -8,7 +8,7 @@
     </head>
     <body ng-controller="MainCtrl" force-registration="false">
         <div>
-            <div class="padding widget" ng-show="!musicservice.playing">
+            <div class="padding widget" ng-show="!musicservice.playing" ng-cloak>
                 <p>Loading <img src="assets/img/loading.gif"></p>
             </div>
             <div ng-repeat="track in tracks | range:musicservice.index | limitTo:1" class="widget" ng-show="musicservice.playing" ng-cloak>
@@ -54,5 +54,5 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
 
     <!-- App libs -->
-    <script src="assets/js/app-eb04a8b188.js"></script>
+    <script src="assets/js/app-a210528f9e.js"></script>
 </html>
