@@ -132,6 +132,8 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
             parent.postMessage('close', '*');
         }
     };
+
+    $scope.start();
 });
 
 app.controller('RegistrationModalCtrl',  function ($scope, $uibModalInstance) {
