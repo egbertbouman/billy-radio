@@ -3,7 +3,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
     /* Music player */
     $scope.musicservice = MusicService;
     $scope.current_time = 0;
-    $scope.current_volume = 80;
+    $scope.current_volume = 50;
 
     $scope.start = function() {
         // Start music service
