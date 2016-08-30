@@ -50,8 +50,10 @@ gulp.task('build-js-css-html', ['build-tmpls'], function () {
         .pipe(gulpif('*.js', jsTask()))
         .pipe(gulpif('*.css', cssTask()))
         .pipe(revReplace())
-        .pipe(addsrc('widget.js'))
-        .pipe(gulpif('widget.js', uglify()))
+        .pipe(addsrc('widget_iframe.js'))
+        .pipe(gulpif('widget_iframe.js', uglify()))
+        .pipe(addsrc('widget_popup.js'))
+        .pipe(gulpif('widget_popup.js', uglify()))
         .pipe(gulp.dest('dist'));
 });
 
