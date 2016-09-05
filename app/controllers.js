@@ -126,10 +126,14 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         });
     };
 
-    $scope.close_widget = function () {
-        var parent = window.parent;
-        if (parent && parent.postMessage) {
-            parent.postMessage('close', '*');
+    var old_volume = $scope.current_volume;
+    window.onmessage = function(event) {
+        if (event.data === 'restore-volume') {
+            $scope.set_volume(old_volume);
+        }
+        else if (event.data === 'mute-volume') {
+            old_volume = $scope.current_volume;
+            $scope.set_volume(0);
         }
     };
 
