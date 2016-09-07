@@ -43,7 +43,13 @@
     var widget = document.getElementById('widget');
     widget.onload = function() {
         console.log('Widget iframe loaded');
-    }
+    };
+
+    window.onmessage = function(event) {
+        if (event.data === 'close-widget') {
+            window.location = edx.src;
+        }
+    };
 </script>
 
 </html>

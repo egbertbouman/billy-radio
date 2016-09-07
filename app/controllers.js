@@ -126,6 +126,10 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         });
     };
 
+    $scope.close_widget = function() {
+        parent.postMessage('close-widget', '*');
+    }
+
     var old_volume = $scope.current_volume;
     window.onmessage = function(event) {
         if (event.data === 'restore-volume') {
