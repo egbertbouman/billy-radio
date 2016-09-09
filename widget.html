@@ -8,7 +8,7 @@
     </head>
     <body ng-controller="MainCtrl" force-registration="false">
         <div>
-            <button type="button" class="close close-widget" ng-click="close_widget()" ng-show="window.location !== window.parent.location">×</button>
+            <button type="button" class="close close-widget" ng-click="close_widget()" ng-show="in_iframe">×</button>
             <div class="padding widget" ng-show="!musicservice.playing" ng-cloak>
                 <p>Loading <img src="assets/img/loading.gif"></p>
             </div>
@@ -55,5 +55,5 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
 
     <!-- App libs -->
-    <script src="assets/js/app-a418c8bb21.js"></script>
+    <script src="assets/js/app-aa21225791.js"></script>
 </html>
