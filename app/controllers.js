@@ -128,7 +128,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
 
     $scope.close_widget = function() {
         parent.postMessage('close-widget', '*');
-    }
+    };
 
     var old_volume = $scope.current_volume;
     window.onmessage = function(event) {
@@ -140,6 +140,10 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
             $scope.set_volume(0);
         }
     };
+
+    $(window).ready(function() {
+        $scope.in_iframe = window.location !== window.parent.location;
+    });
 
     $scope.start();
 });
