@@ -8,7 +8,7 @@
     </head>
     <body ng-controller="MainCtrl" force-registration="false">
         <div>
-            <button type="button" class="close close-widget" ng-click="close_widget()" ng-show="window.self !== window.top">×</button>
+            <button type="button" class="close close-widget" ng-click="close_widget()" ng-show="window.location !== window.parent.location">×</button>
             <div class="padding widget" ng-show="!musicservice.playing" ng-cloak>
                 <p>Loading <img src="assets/img/loading.gif"></p>
             </div>
