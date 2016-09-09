@@ -29,7 +29,7 @@
 
     window.onmessage = function(event) {
         if (event.data === 'close-widget') {
-            window.location = edx.src;
+            window.location = $('#edx').contents().get(0).location.href;
         }
     };
 </script>
