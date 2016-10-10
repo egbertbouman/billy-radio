@@ -30,3 +30,7 @@ Note: We can't put edX in an iframe is we are hosting the parent html file on a 
 
 ### Billy-radio in action
 ![Billy-radio screenshot](/doc/billy-radio-screenshot.jpg?raw=true)
+
+
+# Acknowledgements
+This work has received partial funding from the European Union's Seventh Framework Programme (FP7/2007-2013) under grant agreement n° 610594 CrowdRec.
