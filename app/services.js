@@ -449,7 +449,7 @@ app.service('ApiService', function($http, $websocket, HelperService) {
     };
 });
 
-app.service('HelperService', function($uibModal) {
+app.service('HelperService', function() {
 
     this.padNumber = function(number, size) {
         var s = String(number);
@@ -480,15 +480,6 @@ app.service('HelperService', function($uibModal) {
         var args = Array.prototype.slice.call(arguments);
         var str = args.shift();
         return str.replace(/\{(\d+)\}/g, function (m, n) { return args[n]; });
-    };
-    this.alert = function(message) {
-        $uibModal.open({
-            animation: false,
-            templateUrl: 'app/views/alert_modal.html',
-            controller: function($scope) {
-                $scope.message = message;
-            },
-        });
     };
 
 });

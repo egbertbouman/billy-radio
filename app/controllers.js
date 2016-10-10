@@ -1,4 +1,4 @@
-app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uibModal, HelperService, MusicService, ApiService) {
+app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, HelperService, MusicService, ApiService) {
 
     /* Music player */
     $scope.musicservice = MusicService;
@@ -97,35 +97,6 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
         }
     };
 
-    /* Dialogs */
-    if ($attrs.forceRegistration !== "false") {
-        // If forceRegistration is anything other then "false", force the user to register before starting the radio
-        var modalInstance = $uibModal.open({
-            animation: false,
-            templateUrl: 'app/views/registration_modal.html',
-            controller: 'RegistrationModalCtrl',
-            backdrop  : 'static',
-            keyboard  : false
-        });
-        modalInstance.result.then(function success(result) {
-            ApiService.register(result.name, result.activity);
-            $scope.start();
-        }, function error() {
-        });
-    }
-
-    $scope.create_suggestion = function() {
-        var modalInstance = $uibModal.open({
-            animation: false,
-            templateUrl: 'app/views/suggestion_modal.html',
-            controller: 'SuggestionModalCtrl'
-        });
-        modalInstance.result.then(function success(result) {
-            ApiService.suggest(result.suggestion);
-        }, function error() {
-        });
-    };
-
     $scope.close_widget = function() {
         parent.postMessage('close-widget', '*');
     };
@@ -146,38 +117,4 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uib
     });
 
     $scope.start();
-});
-
-app.controller('RegistrationModalCtrl',  function ($scope, $uibModalInstance) {
-    $scope.save = function () {
-        $scope.activity_popover = false;
-
-        $scope.name_popover = (!$scope.name);
-        if (!$scope.name)
-            return;
-
-        $scope.activity_popover = (!$scope.activity);
-        if (!$scope.activity)
-            return;
-
-        $uibModalInstance.close({
-            name: $scope.name,
-            activity: $scope.activity
-        });
-    };
-});
-
-app.controller('SuggestionModalCtrl',  function ($scope, $uibModalInstance) {
-    $scope.save = function () {
-        $scope.suggestion_popover = (!$scope.suggestion);
-        if (!$scope.suggestion)
-            return;
-
-        $uibModalInstance.close({
-            suggestion: $scope.suggestion
-        });
-    };
-    $scope.close = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
 });
