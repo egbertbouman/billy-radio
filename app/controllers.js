@@ -1,4 +1,6 @@
-app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, HelperService, MusicService, ApiService) {
+app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, $uibModal, HelperService, MusicService, ApiService) {
+
+    $scope.radio = 'd3e6f1ac9e0365f5e0685204284cda6dab51a52b';
 
     /* Music player */
     $scope.musicservice = MusicService;
@@ -35,12 +37,9 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, Help
             }, 1000);
         });
     };
-    $scope.$on('playing', function(event) {
-        // Soundcloud seems to reset the volume after changing tracks, so we need to set the volume again.
-        MusicService.set_volume($scope.current_volume);
-    });
     $scope.$on('ended', function(event) {
         MusicService.next(true);
+        log();
     });
     $scope.set_volume = function(volume) {
         MusicService.set_volume(volume);
@@ -52,15 +51,25 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, Help
         $scope.set_volume(volume);
     };
     var reload = function(tracks) {
-        MusicService.set_playlists({default_name: {tracks: tracks}});
-        MusicService.load_and_play({name: 'default_name', index: 0});
+        MusicService.set_playlists({default_playlistname: {tracks: tracks}});
+        MusicService.load_and_play({name: 'default_playlistname', index: 0});
+        log();
     };
 
     /* Server variables */
     $scope.tracks = ApiService.tracks;
     $scope.position = ApiService.position;
     $scope.registrations = ApiService.registrations;
-    $scope.suggestions = ApiService.suggestions;
+
+    /* Clicklog */
+    var log = function() {
+        ApiService.post_clicklog({
+            track: $scope.musicservice.track.link,
+            user: $scope.user_name,
+            volume: $scope.current_volume,
+            radio: $scope.radio
+        });
+    };
 
     /* Play position synchronization */
     var playlist_position = function(index, position) {
@@ -91,7 +100,7 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, Help
         else if (timediff >= 5) {
             console.log('Time difference is ' + timediff + 's, correcting play position');
             if (MusicService.index !== index) {
-                MusicService.load_and_play({name: 'default_name', index: index});
+                MusicService.load_and_play({name: 'default_playlistname', index: index});
             }
             MusicService.seek(position);
         }
@@ -117,4 +126,5 @@ app.controller('MainCtrl', function ($rootScope, $scope, $attrs, $interval, Help
     });
 
     $scope.start();
+    ApiService.register('default_username', $scope.radio);
 });
